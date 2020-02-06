@@ -273,23 +273,23 @@ char *shellReadLine(void)
   // 4. Return the char*
 
 
-  int bufsize;
-  
-  char **buffer;
-  buffer = (char**) malloc(sizeof(char)*bufsize);
+  int bufsize = 10;
+  char *buffer;
+
+  buffer = malloc(sizeof(char)*bufsize);
 
 
   if(buffer == NULL){
     return NULL;
   }
 
-
-  char *read = (char*) getline(&buffer,&bufsize,stdin);
-
   free(buffer);
 
-  if(read != NULL){
-    return read;
+
+
+  
+  if(  getline(&buffer,&bufsize,stdin) != -1){
+    return buffer;
   }
   else{
     return NULL;
