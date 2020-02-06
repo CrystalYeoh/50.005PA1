@@ -308,8 +308,22 @@ char **shellTokenizeInput(char *line)
   // 2. Check that char ** that is returend by malloc is not NULL
   // 3. Tokenize the *line using strtok() function
   // 4. Return the char **
-
-  return NULL;
+  int buffsize = 10;
+  char **buffer;
+  const char str[1] = " ";
+  char *token;
+  int index = 0;
+  buffer = malloc(sizeof(char *)*buffsize);  
+  token = strtok(line,str);
+  buffer[index] = token;
+  index++;
+  while (token!=NULL){
+    token = strtok(NULL,str);
+    buffer[index] = token;
+    index++;
+  }
+  buffer[index] = NULL;
+  return buffer;
 }
 
 /**
@@ -346,6 +360,10 @@ int main(int argc, char **argv)
   printf("Shell Run successful. Running now: \n");
   char* line = shellReadLine();
   printf("The line is: %s \n",line);
+
+  char** args = shellTokenizeInput(line);
+  printf("1st token: %s \n",args[0]);
+  printf("1st token: %s \n",args[1]);
 
   // Run command loop
   shellLoop();
