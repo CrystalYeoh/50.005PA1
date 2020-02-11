@@ -250,27 +250,28 @@ int shellExecuteInput(char **args)
 
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
-    return 1
+    return 1;
   }
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
-  const char *do_not_include[] = {
-    "cd",
-    "help",
-    "exit",
-    "usage"
-  }
-  if(builtin_commands.contain(args[0]) && !do_not_include.contain(args[0])){
-    const int result = fork();
-    if (result == -1){
-      //fail
-    }
-    if (result == 0){
-      //Child process
-      builtin_command(args)
+  for(int i=0; i<numOfBuiltinFunctions();++i){
+    if(strcmp(args[0],builtin_commands[i])==0){
+      if(i<4){
+        return 1;
+      }
+      int result = fork();
+      if (result == -1){
+        return 1;
+      }
+      if (result == 0){
+        //child
+        builtin_commandFunc[i](args);
+        exit(1);
+      }
+      else{
+        pid_t waitpid(pid_t pid, int *stat_loc, WUNTRACED);
 
-    }
-    else{ 
-      //Parent process
+        //parent
+      }
     }
   }
   // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
@@ -386,7 +387,7 @@ int main(int argc, char **argv)
 
   char** args = shellTokenizeInput(line);
   printf("1st token: %s \n",args[0]);
-  printf("1st token: %s \n",args[1]);
+  printf("2st token: %s \n",args[1]);
   shellExecuteInput(args);
   // Run command loop
   shellLoop();
