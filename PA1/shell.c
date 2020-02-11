@@ -246,23 +246,18 @@ int shellUsage(char **args)
  */
 int shellExecuteInput(char **args)
 {
-  printf("runs shellexec");
   /** TASK 3 **/
-  int status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
-    printf("doesnt work");
     return 1;
   }
+
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
   for(int i=0; i<numOfBuiltinFunctions();++i){
-    printf("hi %d",i);
     if(strcmp(args[0],builtin_commands[i])==0){
-      printf("check");
       if(i<4){
         return 1;
       }
-      printf("forked");
       int result = fork();
       if (result == -1){
         return 1;
@@ -270,16 +265,15 @@ int shellExecuteInput(char **args)
       if (result == 0){
         //child
         builtin_commandFunc[i](args);
-        status = 1;
         exit(status);
         
       }
       if (result>0){
-        printf("parent worked");
+        //parent
         pid_t endID = waitpid(result, &status, WUNTRACED);
         return status;
 
-        //parent
+
       }
     }
   }
