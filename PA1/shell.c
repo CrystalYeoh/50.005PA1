@@ -246,8 +246,9 @@ int shellUsage(char **args)
  */
 int shellExecuteInput(char **args)
 {
+  int stat_loc;
   /** TASK 3 **/
-
+  printf("shellExecuteInput runs");
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
     return 1;
@@ -259,17 +260,20 @@ int shellExecuteInput(char **args)
         return 1;
       }
       int result = fork();
+      printf("fork works");
       if (result == -1){
         return 1;
       }
       if (result == 0){
         //child
+        printf("child running");
+
         builtin_commandFunc[i](args);
         exit(1);
       }
       else{
-        pid_t waitpid(pid_t pid, int *stat_loc, WUNTRACED);
-
+        pid_t waiting = waitpid(result, &stat_loc, WUNTRACED);
+        printf("child finished");
         //parent
       }
     }
@@ -279,7 +283,7 @@ int shellExecuteInput(char **args)
   // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
   // 6. Return the child's return value to the caller of shellExecuteInput
   // 7. If args[0] is not in builtin_command, print out an error message to tell the user that command doesn't exist and return 1
-
+ 
   return 1;
 }
 
