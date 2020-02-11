@@ -247,6 +247,9 @@ int shellUsage(char **args)
 int shellExecuteInput(char **args)
 {
   /** TASK 3 **/
+
+  int status;
+  int* stat_loc = status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
     return 1;
@@ -265,13 +268,15 @@ int shellExecuteInput(char **args)
       if (result == 0){
         //child
         builtin_commandFunc[i](args);
-        exit(status);
+        exit(1);
         
       }
       if (result>0){
         //parent
-        pid_t endID = waitpid(result, &status, WUNTRACED);
-        return status;
+        printf("fork works, waiting for child");
+        pid_t endID = waitpid(result, stat_loc, WUNTRACED);
+        printf(endID);
+        return endID;
 
 
       }
