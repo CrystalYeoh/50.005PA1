@@ -246,9 +246,8 @@ int shellUsage(char **args)
  */
 int shellExecuteInput(char **args)
 {
-  int stat_loc;
   /** TASK 3 **/
-  printf("shellExecuteInput runs");
+  int status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
     return 1;
@@ -260,20 +259,32 @@ int shellExecuteInput(char **args)
         return 1;
       }
       int result = fork();
-      printf("fork works");
+      printf("fork works\n");
       if (result == -1){
         return 1;
       }
       if (result == 0){
         //child
-        printf("child running");
+        printf("child running\n");
 
         builtin_commandFunc[i](args);
         exit(1);
+        
       }
-      else{
-        pid_t waiting = waitpid(result, &stat_loc, WUNTRACED);
-        printf("child finished");
+      if (result>0){
+        printf("parent worked\n");
+        pid_t endID = waitpid(result, &status, WUNTRACED);
+        if (endID==-1){
+          printf("fails");
+        }
+        if (endID==0){
+          printf("smth is wrong");
+        }
+        else{
+          printf("child returned\n");
+        }
+        return endID;
+
         //parent
       }
     }
