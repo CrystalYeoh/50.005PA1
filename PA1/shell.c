@@ -386,6 +386,17 @@ int shellExecuteInput(char **args)
         }
   // 6. Return the child's return value to the caller of shellExecuteInput
         return endID;
+<<<<<<< HEAD
+
+        //parent
+        printf("fork works, waiting for child");
+        endID = waitpid(result, stat_loc, WUNTRACED);
+        printf(endID);
+        return endID;
+
+
+=======
+>>>>>>> 962a201bfbed2ccd42be4ba21b03863e58e8d7f2
       }
     }
   }
