@@ -1,0 +1,2 @@
+crystal+  2705     1  2704  2704  3 16:53 ?        00:00:00 ./summond
+crystal+  2716  2714  2713   110  0 16:53 pts/0    00:00:00 grep summond
