@@ -5,8 +5,20 @@
 */
 int shellFind(char **args)
 {
-
   printf("shellFind is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/find");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'find' in shellPrograms using execvp system call
@@ -24,7 +36,19 @@ int shellFind(char **args)
 int shellDisplayFile(char **args)
 {
   printf("shellDisplayFile is called!\n");
-
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/display");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
   /** TASK 4 **/
   // 1. Execute the binary program 'display' in shellPrograms using execvp system call
   // 2. Check if execvp is successful by checking its return value
@@ -42,6 +66,19 @@ int shellListDirAll(char **args)
 {
 
   printf("shellListDirAll is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/listdirall");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'listdirall' in shellPrograms using execvp system call
@@ -59,6 +96,19 @@ int shellListDirAll(char **args)
 int shellListDir(char **args)
 {
   printf("shellListDir is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/listdir");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'listdir' in shellPrograms using execvp system call
@@ -77,6 +127,19 @@ int shellListDir(char **args)
 int shellCountLine(char **args)
 {
   printf("shellCountLine is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/countline");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'countline' in shellPrograms using execvp system call
@@ -94,6 +157,19 @@ int shellCountLine(char **args)
 int shellSummond(char **args)
 {
   printf("shellDaemonize is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/summond");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'summond' in shellPrograms using execvp system call
@@ -113,6 +189,19 @@ int shellSummond(char **args)
 int shellCheckDaemon(char **args)
 {
   printf("shellCheckDaemon is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  char *path;
+  int rtn;
+  buffer = malloc(sizeof(char)*bufsize);
+  path = getcwd(buffer,bufsize);
+  strcat(path,"/shellPrograms/checkdaemon");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'checkdaemon' in shellPrograms using execvp system call
