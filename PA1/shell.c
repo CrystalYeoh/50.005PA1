@@ -346,13 +346,14 @@ int shellExecuteInput(char **args)
 
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
   for(int i=0; i<numOfBuiltinFunctions();++i){
+<<<<<<< HEAD
     //@crystal there is an issue here with strcmp, I added a check for when the strcmp result is 0, which is what we get if we do not put in a 2nd argument
+=======
+>>>>>>> ec3222e3683b3b27213f50c5473e4c9cbb72781a
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
         //added this in
-        printf("this is either cd, help, exit or usage\n");
-        builtin_commandFunc[i](args);
-        return 1;
+        return builtin_commandFunc[i](args);
       }
   // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
 
@@ -477,28 +478,28 @@ void shellLoop(void)
   //write a loop where you do the following:
   while(status == 1){
   // 1. print the message prompt
-  printf("customshell>");
-  // 2. clear the buffer and move the output to the console using fflush
-  fflush(stdin);
-  // 3. clear the buffer to accept a new string in readLine() ***IGNORED***
-  // 4. invoke shellReadLine() and store the output at line
-  line = shellReadLine();
-  // 5. invoke shellTokenizeInput(line) and store the output at args**
-  args = shellTokenizeInput(line);
-  // 6. execute the tokens using shellExecuteInput(args)
-  int rtn = shellExecuteInput(args);
-  // 7. free memory location containing the strings of characters
-  free(args);
-  // 8. free memory location containing char* to the first letter of each word in the input string
-  free(line);
-  // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
-  printf("this is rtn: %d \n",rtn);
-  if(rtn ==1){
-    status = 1;
-  }
-  else{
-    status = shellExit(args);
-  }
+    printf("customshell>");
+    // 2. clear the buffer and move the output to the console using fflush
+    fflush(stdin);
+    // 3. clear the buffer to accept a new string in readLine() ***IGNORED***
+    // 4. invoke shellReadLine() and store the output at line
+    line = shellReadLine();
+    // 5. invoke shellTokenizeInput(line) and store the output at args**
+    args = shellTokenizeInput(line);
+    // 6. execute the tokens using shellExecuteInput(args)
+    int rtn = shellExecuteInput(args);
+    // 7. free memory location containing the strings of characters
+    free(args);
+    // 8. free memory location containing char* to the first letter of each word in the input string
+    free(line);
+    // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
+    printf("this is rtn: %d \n",rtn);
+    if(rtn ==1){
+      status = 1;
+    }
+    else{
+      status = rtn;
+    }
   }
 }
 
@@ -506,13 +507,6 @@ int main(int argc, char **argv)
 {
 
   printf("Shell Run successful. Running now: \n");
-  char* line = shellReadLine();
-  printf("The line is: %s \n",line);
-
-  char** args = shellTokenizeInput(line);
-  printf("1st token: %s \n",args[0]);
-  printf("2st token: %s \n",args[1]);
-  shellExecuteInput(args);
   // Run command loop
   shellLoop();
 
