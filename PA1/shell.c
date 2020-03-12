@@ -386,17 +386,7 @@ int shellExecuteInput(char **args)
         }
   // 6. Return the child's return value to the caller of shellExecuteInput
         return endID;
-<<<<<<< HEAD
 
-        //parent
-        printf("fork works, waiting for child");
-        endID = waitpid(result, stat_loc, WUNTRACED);
-        printf(endID);
-        return endID;
-
-
-=======
->>>>>>> 962a201bfbed2ccd42be4ba21b03863e58e8d7f2
       }
     }
   }
@@ -504,8 +494,8 @@ void shellLoop(void)
   free(line);
   // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
   printf("this is rtn: %d \n",rtn);
-  if(rtn !=1){
-    status = 0;
+  if(rtn ==1){
+    status = 1;
   }
   else{
     status = shellExit(args);
