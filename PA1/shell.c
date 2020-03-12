@@ -182,7 +182,7 @@ int shellExit(char **args)
 int shellUsage(char **args)
 {
   int functionIndex = -1;
-
+  
   // Check if the commands exist in the command list
   for (int i = 0; i < numOfBuiltinFunctions(); i++)
   {
@@ -247,20 +247,26 @@ int shellUsage(char **args)
 int shellExecuteInput(char **args)
 {
   /** TASK 3 **/
-
   int status;
   int* stat_loc = status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
+    printf("this is an empty command\n");
     return 1;
   }
 
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
   for(int i=0; i<numOfBuiltinFunctions();++i){
+    //@crystal there is an issue here with strcmp, I added a check for when the strcmp result is 10, which is what we get if we do not put in a 2nd argument
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
+        //added this in
+        printf("this is either cd, help, exit or usage\n");
+        builtin_commandFunc[i](args);
         return 1;
       }
+  // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
+
       int result = fork();
       printf("fork works\n");
       if (result == -1){
@@ -269,40 +275,33 @@ int shellExecuteInput(char **args)
       if (result == 0){
         //child
         printf("child running\n");
-
+  // 4. For the child process, execute the appropriate functions depending on the command in args[0]. Pass char ** args to the function.
         builtin_commandFunc[i](args);
         exit(1);
         
       }
       if (result>0){
         printf("parent worked\n");
+  // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
+
         pid_t endID = waitpid(result, &status, WUNTRACED);
         if (endID==-1){
-          printf("fails");
+          printf("fails\n");
         }
         if (endID==0){
-          printf("smth is wrong");
+          printf("smth is wrong\n");
         }
         else{
           printf("child returned\n");
         }
+  // 6. Return the child's return value to the caller of shellExecuteInput
         return endID;
-
-        //parent
-        printf("fork works, waiting for child");
-        pid_t endID = waitpid(result, stat_loc, WUNTRACED);
-        printf(endID);
-        return endID;
-
-
       }
     }
   }
-  // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
-  // 4. For the child process, execute the appropriate functions depending on the command in args[0]. Pass char ** args to the function.
-  // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
-  // 6. Return the child's return value to the caller of shellExecuteInput
   // 7. If args[0] is not in builtin_command, print out an error message to tell the user that command doesn't exist and return 1
+
+  printf("Invalid command received. Type help to see what commands are implemented.\n");
  
   return 1;
 }
@@ -358,15 +357,14 @@ char **shellTokenizeInput(char *line)
   // 4. Return the char **
   int buffsize = 10;
   char **buffer;
-  const char str[1] = " ";
   char *token;
   int index = 0;
   buffer = malloc(sizeof(char *)*buffsize);  
-  token = strtok(line,str);
+  token = strtok(line,SHELL_INPUT_DELIM);
   buffer[index] = token;
   index++;
   while (token!=NULL){
-    token = strtok(NULL,str);
+    token = strtok(NULL,SHELL_INPUT_DELIM);
     buffer[index] = token;
     index++;
   }
