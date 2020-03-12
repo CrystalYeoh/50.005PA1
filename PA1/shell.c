@@ -261,6 +261,7 @@ int shellHelp(char **args)
  */
 int shellExit(char **args)
 {
+  printf("shell is exiting.");
   return 0;
 }
 
@@ -470,23 +471,35 @@ void shellLoop(void)
   //instantiate local variables
   char *line;  // to accept the line of string from user
   char **args; // to tokenize them as arguments separated by spaces
-  int status;  // to tell the shell program whether to terminate shell or not
+  int status = 1;  // to tell the shell program whether to terminate shell or not
 
   /** TASK 4 **/
   //write a loop where you do the following:
-
+  while(status == 1){
   // 1. print the message prompt
+  printf("customshell>");
   // 2. clear the buffer and move the output to the console using fflush
-  // 3. clear the buffer to accept a new string in readLine()
+  fflush(stdin);
+  // 3. clear the buffer to accept a new string in readLine() ***IGNORED***
   // 4. invoke shellReadLine() and store the output at line
+  line = shellReadLine();
   // 5. invoke shellTokenizeInput(line) and store the output at args**
+  args = shellTokenizeInput(line);
   // 6. execute the tokens using shellExecuteInput(args)
-
+  int rtn = shellExecuteInput(args);
   // 7. free memory location containing the strings of characters
+  free(args);
   // 8. free memory location containing char* to the first letter of each word in the input string
+  free(line);
   // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
-
-
+  printf("this is rtn: %d \n",rtn);
+  if(rtn !=1){
+    status = 0;
+  }
+  else{
+    status = shellExit(args);
+  }
+  }
 }
 
 int main(int argc, char **argv)
