@@ -290,7 +290,7 @@ int shellExecuteInput(char **args)
 
         //parent
         printf("fork works, waiting for child");
-        pid_t endID = waitpid(result, stat_loc, WUNTRACED);
+        endID = waitpid(result, stat_loc, WUNTRACED);
         printf(endID);
         return endID;
 
