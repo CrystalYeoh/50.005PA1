@@ -9,7 +9,6 @@ int shellFind(char **args)
   int bufsize = 1024;
   char *buffer;
   char *path;
-  int rtn;
   buffer = malloc(sizeof(char)*bufsize);
   path = getcwd(buffer,bufsize);
   strcat(path,"/shellPrograms/find");
@@ -347,7 +346,7 @@ int shellExecuteInput(char **args)
 
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
   for(int i=0; i<numOfBuiltinFunctions();++i){
-    //@crystal there is an issue here with strcmp, I added a check for when the strcmp result is 10, which is what we get if we do not put in a 2nd argument
+    //@crystal there is an issue here with strcmp, I added a check for when the strcmp result is 0, which is what we get if we do not put in a 2nd argument
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
         //added this in
