@@ -346,10 +346,6 @@ int shellExecuteInput(char **args)
 
   // 2. Otherwise, check if args[0] is in any of our builtin_commands, and that it is NOT cd, help, exit, or usage.
   for(int i=0; i<numOfBuiltinFunctions();++i){
-<<<<<<< HEAD
-    //@crystal there is an issue here with strcmp, I added a check for when the strcmp result is 0, which is what we get if we do not put in a 2nd argument
-=======
->>>>>>> ec3222e3683b3b27213f50c5473e4c9cbb72781a
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
         //added this in
@@ -375,6 +371,10 @@ int shellExecuteInput(char **args)
   // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
 
         pid_t endID = waitpid(result, &status, WUNTRACED);
+        int exit_status=0;
+        if(WIFEXITED(status)){
+          exit_status = WEXITSTATUS(status);
+        }
         if (endID==-1){
           printf("fails\n");
         }
@@ -385,7 +385,7 @@ int shellExecuteInput(char **args)
           printf("child returned\n");
         }
   // 6. Return the child's return value to the caller of shellExecuteInput
-        return endID;
+        return exit_status;
 
       }
     }

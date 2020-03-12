@@ -10,7 +10,7 @@ int shellCheckDaemon_code()
    sprintf(command, "ps -efj | grep summond  | grep -v tty > output.txt");
 
    // TODO: Execute the command using system(command) and check its return value
-
+   system(command);
    free(command);
 
    int live_daemons = 0;
