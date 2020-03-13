@@ -5,6 +5,7 @@
 */
 int shellListDir_code(char **args)
 {
+    printf("shellistdir running.\n");
     if (args[1] != NULL)
     {
         char *token = strtok(args[1], SHELL_OPT_DELIM);

@@ -1,12 +1,26 @@
 #include "shell.h"
 
+//Change to your shellprograms path
+char *path = "/home/crystalyeohje/50.005PA1/PA1/shellPrograms";
+
 /*
  List all files matching the name in args[1] under current directory and subdirectories
 */
 int shellFind(char **args)
 {
-
   printf("shellFind is called!\n");
+  
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/find");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'find' in shellPrograms using execvp system call
@@ -24,7 +38,17 @@ int shellFind(char **args)
 int shellDisplayFile(char **args)
 {
   printf("shellDisplayFile is called!\n");
-
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/display");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
   /** TASK 4 **/
   // 1. Execute the binary program 'display' in shellPrograms using execvp system call
   // 2. Check if execvp is successful by checking its return value
@@ -42,6 +66,17 @@ int shellListDirAll(char **args)
 {
 
   printf("shellListDirAll is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/listdirall");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'listdirall' in shellPrograms using execvp system call
@@ -59,6 +94,17 @@ int shellListDirAll(char **args)
 int shellListDir(char **args)
 {
   printf("shellListDir is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/listdir");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'listdir' in shellPrograms using execvp system call
@@ -77,6 +123,17 @@ int shellListDir(char **args)
 int shellCountLine(char **args)
 {
   printf("shellCountLine is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/countline");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'countline' in shellPrograms using execvp system call
@@ -94,6 +151,17 @@ int shellCountLine(char **args)
 int shellSummond(char **args)
 {
   printf("shellDaemonize is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/summond");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'summond' in shellPrograms using execvp system call
@@ -113,6 +181,17 @@ int shellSummond(char **args)
 int shellCheckDaemon(char **args)
 {
   printf("shellCheckDaemon is called!\n");
+  int bufsize = 1024;
+  char *buffer;
+  buffer = malloc(sizeof(char)*bufsize);
+  strcat(buffer,path);
+  strcat(buffer,"/checkdaemon");
+  if(execvp(buffer,args) == -1){
+    printf("failed.\n");
+    free(buffer);
+    return 1;
+  }
+  free(buffer);
 
   /** TASK 4 **/
   // 1. Execute the binary program 'checkdaemon' in shellPrograms using execvp system call
@@ -172,6 +251,7 @@ int shellHelp(char **args)
  */
 int shellExit(char **args)
 {
+  printf("Shell is exiting.\n");
   return 0;
 }
 
@@ -182,7 +262,7 @@ int shellExit(char **args)
 int shellUsage(char **args)
 {
   int functionIndex = -1;
-
+  
   // Check if the commands exist in the command list
   for (int i = 0; i < numOfBuiltinFunctions(); i++)
   {
@@ -247,12 +327,11 @@ int shellUsage(char **args)
 int shellExecuteInput(char **args)
 {
   /** TASK 3 **/
-
   int status;
   int* stat_loc = status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
-    printf("Invalid command received. Type help to see what commands are implemented.");
+    printf("Invalid command received. Type help to see what commands are implemented.\n");
     return 1;
   }
 
@@ -260,34 +339,46 @@ int shellExecuteInput(char **args)
   for(int i=0; i<numOfBuiltinFunctions();++i){
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
-        return 1;
+        //added this in
+        return builtin_commandFunc[i](args);
       }
+  // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
+
       int result = fork();
       if (result == -1){
         return 1;
       }
       if (result == 0){
         //child
+  // 4. For the child process, execute the appropriate functions depending on the command in args[0]. Pass char ** args to the function.
         builtin_commandFunc[i](args);
         exit(1);
         
       }
       if (result>0){
-        //parent
-        printf("fork works, waiting for child");
-        endID = waitpid(result, stat_loc, WUNTRACED);
-        return endID;
+  // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
 
+        pid_t endID = waitpid(result, &status, WUNTRACED);
+        int exit_status=0;
+        if(WIFEXITED(status)){
+          exit_status = WEXITSTATUS(status);
+        }
+        if (endID==-1){
+          printf("Child Termination Error\n");
+        }
+        if (endID==0){
+          printf("Child exists but has not yet changed state.\n");
+        }
+  // 6. Return the child's return value to the caller of shellExecuteInput
+        return exit_status;
 
       }
     }
   }
-  // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
-  // 4. For the child process, execute the appropriate functions depending on the command in args[0]. Pass char ** args to the function.
-  // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
-  // 6. Return the child's return value to the caller of shellExecuteInput
   // 7. If args[0] is not in builtin_command, print out an error message to tell the user that command doesn't exist and return 1
-  printf("Invalid command received. Type help to see what commands are implemented.");
+
+  printf("Invalid command received. Type help to see what commands are implemented.\n");
+ 
   return 1;
 }
 
@@ -314,8 +405,9 @@ char *shellReadLine(void)
   if(buffer == NULL){
     return NULL;
   }
-
+  
   free(buffer);
+  
 
 
 
@@ -342,15 +434,14 @@ char **shellTokenizeInput(char *line)
   // 4. Return the char **
   int buffsize = 10;
   char **buffer;
-  const char str[1] = " ";
   char *token;
   int index = 0;
   buffer = malloc(sizeof(char *)*buffsize);  
-  token = strtok(line,str);
+  token = strtok(line,SHELL_INPUT_DELIM);
   buffer[index] = token;
   index++;
   while (token!=NULL){
-    token = strtok(NULL,str);
+    token = strtok(NULL,SHELL_INPUT_DELIM);
     buffer[index] = token;
     index++;
   }
@@ -367,36 +458,45 @@ void shellLoop(void)
   //instantiate local variables
   char *line;  // to accept the line of string from user
   char **args; // to tokenize them as arguments separated by spaces
-  int status;  // to tell the shell program whether to terminate shell or not
+  int status = 1;  // to tell the shell program whether to terminate shell or not
 
   /** TASK 4 **/
   //write a loop where you do the following:
-
+  while(status == 1){
   // 1. print the message prompt
-  // 2. clear the buffer and move the output to the console using fflush
-  // 3. clear the buffer to accept a new string in readLine()
-  // 4. invoke shellReadLine() and store the output at line
-  // 5. invoke shellTokenizeInput(line) and store the output at args**
-  // 6. execute the tokens using shellExecuteInput(args)
+    printf("customshell>");
+    // 2. clear the buffer and move the output to the console using fflush
+    fflush(stdin);
+    // 3. clear the buffer to accept a new string in readLine() ***IGNORED***
+    // 4. invoke shellReadLine() and store the output at line
+    line = shellReadLine();
+    // 5. invoke shellTokenizeInput(line) and store the output at args**
+    args = shellTokenizeInput(line);
+    // 6. execute the tokens using shellExecuteInput(args)
+    int rtn = shellExecuteInput(args);
+    // 7. free memory location containing the strings of characters
+    printf("hi\n");
+    free(line);
+    printf("ho\n");
 
-  // 7. free memory location containing the strings of characters
-  // 8. free memory location containing char* to the first letter of each word in the input string
-  // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
+    free(args);
+    
+    // 8. free memory location containing char* to the first letter of each word in the input string
 
-
+    // 9. check return value of shellExecuteInput. If 1, continue the loop (point 1) again and prompt for another input. Else, exit shell. 
+    if(rtn ==1){
+      status = 1;
+    }
+    else{
+      status = rtn;
+    }
+  }
 }
 
 int main(int argc, char **argv)
 {
 
   printf("Shell Run successful. Running now: \n");
-  char* line = shellReadLine();
-  printf("The line is: %s \n",line);
-
-  char** args = shellTokenizeInput(line);
-  printf("1st token: %s \n",args[0]);
-  printf("2st token: %s \n",args[1]);
-  shellExecuteInput(args);
   // Run command loop
   shellLoop();
 
