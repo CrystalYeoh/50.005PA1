@@ -252,6 +252,7 @@ int shellExecuteInput(char **args)
   int* stat_loc = status;
   // 1. Check if args[0] is NULL. If it is, an empty command is entered, return 1
   if (args[0]==NULL){
+    printf("Invalid command received. Type help to see what commands are implemented.");
     return 1;
   }
 
@@ -274,8 +275,7 @@ int shellExecuteInput(char **args)
       if (result>0){
         //parent
         printf("fork works, waiting for child");
-        pid_t endID = waitpid(result, stat_loc, WUNTRACED);
-        printf(endID);
+        endID = waitpid(result, stat_loc, WUNTRACED);
         return endID;
 
 
@@ -287,7 +287,7 @@ int shellExecuteInput(char **args)
   // 5. For the parent process, wait for the child process to complete and fetch the child's return value.
   // 6. Return the child's return value to the caller of shellExecuteInput
   // 7. If args[0] is not in builtin_command, print out an error message to tell the user that command doesn't exist and return 1
-
+  printf("Invalid command received. Type help to see what commands are implemented.");
   return 1;
 }
 
