@@ -1,7 +1,7 @@
 #include "shell.h"
 
 //Change to your shellprograms path
-char *path = "/home/crystalyeohje/50.005PA1/PA1/shellPrograms";
+char *path = "/mnt/c/Users/Omnif/Desktop/SUTD_Term_5/CSE/PA1/50.005PA1/PA1/shellPrograms";
 
 /*
  List all files matching the name in args[1] under current directory and subdirectories
@@ -339,7 +339,11 @@ int shellExecuteInput(char **args)
   for(int i=0; i<numOfBuiltinFunctions();++i){
     if(strcmp(args[0],builtin_commands[i])==0){
       if(i<4){
-        //added this in
+        //check if args[1] is NULL for usage.
+        if(args[1] == NULL && i ==3){
+          printf("usage needs a second argument.\n");
+          return 1;
+        }
         return builtin_commandFunc[i](args);
       }
   // 3. If conditions in (2) are satisfied, perform fork(). Check if fork() is successful.
@@ -406,7 +410,7 @@ char *shellReadLine(void)
     return NULL;
   }
   
-  free(buffer);
+  // free(buffer);
   
 
 
@@ -475,10 +479,7 @@ void shellLoop(void)
     // 6. execute the tokens using shellExecuteInput(args)
     int rtn = shellExecuteInput(args);
     // 7. free memory location containing the strings of characters
-    printf("hi\n");
     free(line);
-    printf("ho\n");
-
     free(args);
     
     // 8. free memory location containing char* to the first letter of each word in the input string

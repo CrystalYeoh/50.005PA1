@@ -14,7 +14,7 @@
 
 //TODO: change to appropriate path
 
-char *path = "home/crystalyeohje/50.005PA1/PA1/logtest_file.txt";
+char *path = "/mnt/c/Users/Omnif/Desktop/SUTD_Term_5/CSE/PA1/50.005PA1/PA1/logtest_file.txt";
 
 /*This function summons a daemon process out of the current process*/
 static int create_daemon()

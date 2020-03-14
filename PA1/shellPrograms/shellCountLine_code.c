@@ -19,7 +19,7 @@ int shellCountLine_code(char **args)
     }
 
     // 3. Read the file line by line by using getline(&buffer, &size, fp)
-    int bufsize = 10;
+    int bufsize = 1000;
     char *buffer;
 
     buffer = malloc(sizeof(char)*bufsize);
@@ -28,19 +28,20 @@ int shellCountLine_code(char **args)
         return NULL;
     }
 
-    free(buffer);
-
+    
     int count = 0;
     // 4. Loop, as long as getline() does not return -1, keeps reading and increment the count
     while(getline(&buffer,&bufsize,fp) != -1){
         count+=1;
     }
-    
+
     // 6. Close the FILE*
     int f = fclose(fp);
 
     // 7. Print out how many lines are there in this particular filename
     printf("There are %d lines in %s.\n",count,args[1]);
+    
+    free(buffer);
 
     // 8. Return 1, to exit program
     return 1;

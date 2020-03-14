@@ -27,7 +27,7 @@ int shellCheckDaemon_code()
 
    // 2. Fetch line by line using getline()
    // 3. Increase the daemon count whenever we encounter a line
-   int bufsize = 10;
+   int bufsize = 1000;
    char *buffer;
 
    buffer = malloc(sizeof(char)*bufsize);
@@ -36,7 +36,6 @@ int shellCheckDaemon_code()
      return NULL;
    }
 
-   free(buffer);
 
    live_daemons = 0;
    
@@ -47,6 +46,8 @@ int shellCheckDaemon_code()
     
    // 4. Close the file
    int f = fclose(fp);
+   free(buffer);
+
    // 5. print your result
 
    if (live_daemons == 0)
